@@ -2,6 +2,8 @@
 
 Este projeto é um aplicativo web mobile desenvolvido com Ionic + Angular que consome a [PokeAPI](https://pokeapi.co/) para exibir uma lista de Pokémons, seus detalhes e gerenciar favoritos.
 
+[Confira Aqui!](https://raylanmedeiros.github.io/PokeAPI/)
+
 ## Funcionalidades
 - Listagem paginada de Pokémons com nome e imagem.
 - Marcação e visualização de Pokémons favoritos.
