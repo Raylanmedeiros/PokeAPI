@@ -21,29 +21,40 @@
       <img
         src="assets/pokeball-loading.gif"
         alt="Loading..."
-        style="width: 15rem; height: 15rem"
+        style="width: 35rem; height: 15rem"
       />
     </div>
   </ng-container>
 
-  <ion-list *ngIf="!loading">
-    <ion-item *ngFor="let pokemon of pokemons" (click)="openDetail(pokemon)">
-      <ion-avatar slot="start">
-        <img [src]="pokemon.image" [alt]="pokemon.name" />
-      </ion-avatar>
-      <ion-label>#{{pokemon.order}} - {{pokemon.name | titlecase }}</ion-label>
-      <ion-button
-        fill="clear"
-        slot="end"
-        color="warning"
-        (click)="toggleFavorite(pokemon); $event.stopPropagation();"
-      >
-        <ion-icon
-          [name]="pokemon.favorite ? 'star' : 'star-outline'"
-        ></ion-icon>
-      </ion-button>
-    </ion-item>
-  </ion-list>
+  <div class="pokemon-list-container">
+    <ion-list *ngIf="!loading">
+      <ion-item *ngFor="let pokemon of pokemons" (click)="openDetail(pokemon)">
+        <ion-avatar slot="start">
+          <img [src]="pokemon.image" [alt]="pokemon.name" />
+        </ion-avatar>
+        <ion-label class="pokemon-label">
+          <div class="pokemon-info-row">
+            <span> #{{pokemon.order}} - {{pokemon.name | titlecase}} </span>
+            <span class="pokemon-details">
+              <ng-container *ngFor="let type of pokemon.typesArray">
+                <span class="pokemon-type-badge">{{ type }}</span>
+              </ng-container>
+            </span>
+          </div>
+        </ion-label>
+        <ion-button
+          fill="clear"
+          slot="end"
+          color="warning"
+          (click)="toggleFavorite(pokemon); $event.stopPropagation();"
+        >
+          <ion-icon
+            [name]="pokemon.favorite ? 'star' : 'star-outline'"
+          ></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
 
   <ion-row class="ion-justify-content-center ion-padding">
     <ion-col size="12" class="ion-text-center" style="margin-bottom: 8px">

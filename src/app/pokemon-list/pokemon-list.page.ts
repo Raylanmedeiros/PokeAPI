@@ -48,10 +48,25 @@ export class PokemonListPage implements OnInit {
               .getPokemonDetails(p.name)
               .toPromise();
             const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${details.id}.png`;
+            const gif = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${details.id}.gif`;
+            const shiny = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${details.id}.png`;
+            const shinyGif = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${details.id}.gif`;
+
             return {
               name: p.name,
               order: details.id,
               image,
+              gif,
+              shiny,
+              shinyGif,
+              types: details.types.map((t: any) => t.type.name).join(', '),
+              typesArray: details.types.map((t: any) => t.type.name),
+              height: details.height,
+              weight: details.weight,
+              abilities: details.abilities
+                .map((a: any) => a.ability.name)
+                .join(', '),
+
               favorite: this.isFavorite({ name: p.name }),
             };
           })
