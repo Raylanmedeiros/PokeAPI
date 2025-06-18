@@ -12,25 +12,41 @@ export class PokemonListPage implements OnInit {
   page: number = 1;
   limit: number = 20;
   loading: boolean = false;
-  favorites: Set<string> = new Set();
+  favorites: any[] = [];
   total: number = 0;
   totalPages: number = 0;
 
   constructor(private pokeapi: PokeapiService) {}
 
   ngOnInit() {
+    this.loadFavorites();
     this.loadPokemons();
+  }
+
+  loadFavorites() {
+    this.favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+  }
+
+  saveFavorites() {
+    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+  }
+
+  isFavorite(pokemon: any): boolean {
+    return this.favorites.some((fav) => fav.name === pokemon.name);
   }
 
   loadPokemons() {
     this.loading = true;
     const offset = (this.page - 1) * this.limit;
     this.pokeapi.getPokemonList(offset, this.limit).subscribe((res: any) => {
-      this.pokemons = res.results.map((p: any) => ({
-        name: p.name,
-        image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${this.extractIdFromUrl(p.url)}.png`,
-        favorite: this.favorites.has(p.name)
-      }));
+      this.pokemons = res.results.map((p: any) => {
+        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${this.extractIdFromUrl(p.url)}.png`;
+        return {
+          name: p.name,
+          image,
+          favorite: this.isFavorite({ name: p.name })
+        };
+      });
       this.total = res.count;
       this.totalPages = Math.ceil(this.total / this.limit);
       this.loading = false;
@@ -64,13 +80,14 @@ export class PokemonListPage implements OnInit {
   }
 
   toggleFavorite(pokemon: any) {
-    if (this.favorites.has(pokemon.name)) {
-      this.favorites.delete(pokemon.name);
+    if (this.isFavorite(pokemon)) {
+      this.favorites = this.favorites.filter((fav) => fav.name !== pokemon.name);
       pokemon.favorite = false;
     } else {
-      this.favorites.add(pokemon.name);
+      this.favorites.push({ name: pokemon.name, image: pokemon.image });
       pokemon.favorite = true;
     }
+    this.saveFavorites();
   }
 
   openDetail(pokemon: any) {

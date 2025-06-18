@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Favoritos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list *ngIf="favorites.length; else noFavs">
+    <ion-item *ngFor="let pokemon of favorites">
+      <ion-avatar slot="start">
+        <img [src]="pokemon.image" [alt]="pokemon.name" />
+      </ion-avatar>
+      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+      <ion-button
+        fill="clear"
+        slot="end"
+        color="danger"
+        (click)="removeFavorite(pokemon)"
+      >
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+  <ng-template #noFavs>
+    <ion-text color="medium">
+      <p class="ion-text-center ion-padding">Nenhum Pokémon favorito.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>
