@@ -35,22 +35,32 @@ export class PokemonListPage implements OnInit {
     return this.favorites.some((fav) => fav.name === pokemon.name);
   }
 
-  loadPokemons() {
+  async loadPokemons() {
     this.loading = true;
     const offset = (this.page - 1) * this.limit;
-    this.pokeapi.getPokemonList(offset, this.limit).subscribe((res: any) => {
-      this.pokemons = res.results.map((p: any) => {
-        const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${this.extractIdFromUrl(p.url)}.png`;
-        return {
-          name: p.name,
-          image,
-          favorite: this.isFavorite({ name: p.name })
-        };
+    this.pokeapi
+      .getPokemonList(offset, this.limit)
+      .subscribe(async (res: any) => {
+        // Para cada Pokémon, buscar detalhes para obter o campo 'order'
+        const pokemons = await Promise.all(
+          res.results.map(async (p: any) => {
+            const details: any = await this.pokeapi
+              .getPokemonDetails(p.name)
+              .toPromise();
+            const image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${details.id}.png`;
+            return {
+              name: p.name,
+              order: details.id,
+              image,
+              favorite: this.isFavorite({ name: p.name }),
+            };
+          })
+        );
+        this.pokemons = pokemons;
+        this.total = res.count;
+        this.totalPages = Math.ceil(this.total / this.limit);
+        this.loading = false;
       });
-      this.total = res.count;
-      this.totalPages = Math.ceil(this.total / this.limit);
-      this.loading = false;
-    });
   }
 
   extractIdFromUrl(url: string): number {
@@ -81,10 +91,16 @@ export class PokemonListPage implements OnInit {
 
   toggleFavorite(pokemon: any) {
     if (this.isFavorite(pokemon)) {
-      this.favorites = this.favorites.filter((fav) => fav.name !== pokemon.name);
+      this.favorites = this.favorites.filter(
+        (fav) => fav.name !== pokemon.name
+      );
       pokemon.favorite = false;
     } else {
-      this.favorites.push({ name: pokemon.name, image: pokemon.image });
+      this.favorites.push({
+        order: pokemon.order,
+        name: pokemon.name,
+        image: pokemon.image,
+      });
       pokemon.favorite = true;
     }
     this.saveFavorites();

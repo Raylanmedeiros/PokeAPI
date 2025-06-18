@@ -13,7 +13,7 @@
       <ion-avatar slot="start">
         <img [src]="pokemon.image" [alt]="pokemon.name" />
       </ion-avatar>
-      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
+      <ion-label>#{{pokemon.order}} - {{ pokemon.name | titlecase }}</ion-label>
       <ion-button
         fill="clear"
         slot="end"

@@ -16,20 +16,37 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-list>
+  <ng-container *ngIf="loading">
+    <div class="ion-text-center ion-padding">
+      <img
+        src="assets/pokeball-loading.gif"
+        alt="Loading..."
+        style="width: 15rem; height: 15rem"
+      />
+    </div>
+  </ng-container>
+
+  <ion-list *ngIf="!loading">
     <ion-item *ngFor="let pokemon of pokemons" (click)="openDetail(pokemon)">
       <ion-avatar slot="start">
         <img [src]="pokemon.image" [alt]="pokemon.name" />
       </ion-avatar>
-      <ion-label>{{ pokemon.name | titlecase }}</ion-label>
-      <ion-button fill="clear" slot="end" color="warning" (click)="toggleFavorite(pokemon); $event.stopPropagation();">
-        <ion-icon [name]="pokemon.favorite ? 'star' : 'star-outline'"></ion-icon>
+      <ion-label>#{{pokemon.order}} - {{pokemon.name | titlecase }}</ion-label>
+      <ion-button
+        fill="clear"
+        slot="end"
+        color="warning"
+        (click)="toggleFavorite(pokemon); $event.stopPropagation();"
+      >
+        <ion-icon
+          [name]="pokemon.favorite ? 'star' : 'star-outline'"
+        ></ion-icon>
       </ion-button>
     </ion-item>
   </ion-list>
 
   <ion-row class="ion-justify-content-center ion-padding">
-    <ion-col size="12" class="ion-text-center" style="margin-bottom: 8px;">
+    <ion-col size="12" class="ion-text-center" style="margin-bottom: 8px">
       <ng-container *ngIf="totalPages > 1">
         <ion-button
           *ngFor="let p of [].constructor(totalPages); let i = index"
@@ -41,7 +58,11 @@
         </ion-button>
       </ng-container>
     </ion-col>
-    <ion-button (click)="prevPage()" [disabled]="page === 1">Anterior</ion-button>
-    <ion-button (click)="nextPage()" [disabled]="page === totalPages">Próxima</ion-button>
+    <ion-button (click)="prevPage()" [disabled]="page === 1"
+      >Anterior</ion-button
+    >
+    <ion-button (click)="nextPage()" [disabled]="page === totalPages"
+      >Próxima</ion-button
+    >
   </ion-row>
 </ion-content>
