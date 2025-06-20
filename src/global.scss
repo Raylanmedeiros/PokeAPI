@@ -35,3 +35,24 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+body.dark-theme {
+  --ion-background-color: #181818;
+  --ion-text-color: #fff;
+  --ion-item-background: #232323;
+  --ion-toolbar-background: #232323;
+  --ion-card-background: #232323;
+  --ion-color-primary: #ffb300;
+  --ion-color-secondary: #e63946;
+  --ion-color-medium: #aaa;
+  --ion-label-color: #aaa;
+}
+
+ion-title {
+  font-size: 2rem; // ajuste o valor conforme desejar
+  font-weight: bold;
+}
+
+ion-toolbar {
+  --background: linear-gradient(90deg, #ff1b1b, #e63946);
+}

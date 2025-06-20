@@ -2,7 +2,21 @@
   <ion-toolbar>
     <ion-title>Pokémons</ion-title>
     <ion-buttons slot="end">
-      <ion-button routerLink="/favorites" routerDirection="forward">
+      <ion-label (click)="toggleContrast()" style="cursor: pointer"
+        >{{ !contrastDark ? 'Dark Mode' : 'Light Mode' }}</ion-label
+      >
+      <ion-button (click)="toggleContrast()">
+        <ion-icon [name]="contrastDark ? 'sunny' : 'moon'"></ion-icon>
+      </ion-button>
+
+      <ion-label routerLink="/favorites" style="cursor: pointer"
+        >favorites</ion-label
+      >
+      <ion-button
+        class="favorites"
+        routerLink="/favorites"
+        routerDirection="forward"
+      >
         <ion-icon name="star" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,35 +40,29 @@
     </div>
   </ng-container>
 
-  <div class="pokemon-list-container">
-    <ion-list *ngIf="!loading">
-      <ion-item *ngFor="let pokemon of pokemons" (click)="openDetail(pokemon)">
-        <ion-avatar slot="start">
-          <img [src]="pokemon.image" [alt]="pokemon.name" />
-        </ion-avatar>
-        <ion-label class="pokemon-label">
-          <div class="pokemon-info-row">
-            <span> #{{pokemon.order}} - {{pokemon.name | titlecase}} </span>
-            <span class="pokemon-details">
-              <ng-container *ngFor="let type of pokemon.typesArray">
-                <span class="pokemon-type-badge">{{ type }}</span>
-              </ng-container>
-            </span>
-          </div>
-        </ion-label>
-        <ion-button
-          fill="clear"
-          slot="end"
-          color="warning"
-          (click)="toggleFavorite(pokemon); $event.stopPropagation();"
-        >
-          <ion-icon
-            [name]="pokemon.favorite ? 'star' : 'star-outline'"
-          ></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-list>
-  </div>
+  <ion-list *ngIf="!loading">
+    <ion-item *ngFor="let pokemon of pokemons" (click)="openDetail(pokemon)">
+      <ion-avatar slot="start">
+        <img [src]="pokemon.image" [alt]="pokemon.name" />
+      </ion-avatar>
+      <ion-label class="pokemon-label">
+        <span> #{{pokemon.order}} - {{pokemon.name | titlecase}} </span>
+        <ng-container *ngFor="let type of pokemon.typesArray">
+          <span class="pokemon-type-badge">{{ type }}</span>
+        </ng-container>
+      </ion-label>
+      <ion-button
+        fill="clear"
+        slot="end"
+        color="warning"
+        (click)="toggleFavorite(pokemon); $event.stopPropagation();"
+      >
+        <ion-icon
+          [name]="pokemon.favorite ? 'star' : 'star-outline'"
+        ></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
 
   <ion-row class="ion-justify-content-center ion-padding">
     <ion-col size="12" class="ion-text-center" style="margin-bottom: 8px">

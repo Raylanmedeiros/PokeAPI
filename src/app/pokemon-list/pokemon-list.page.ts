@@ -15,6 +15,7 @@ export class PokemonListPage implements OnInit {
   favorites: any[] = [];
   total: number = 0;
   totalPages: number = 0;
+  contrastDark = false;
 
   constructor(private pokeapi: PokeapiService) {}
 
@@ -123,5 +124,10 @@ export class PokemonListPage implements OnInit {
 
   openDetail(pokemon: any) {
     // Navegação para detalhes será implementada depois
+  }
+
+  toggleContrast() {
+    this.contrastDark = !this.contrastDark;
+    document.body.classList.toggle('dark-theme', this.contrastDark);
   }
 }
